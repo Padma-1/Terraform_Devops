@@ -9,6 +9,25 @@ resource "aws_instance" "web" {
     Name    = "Dove-web"
     Project = "Dove"
   }
+
+  provisioner "file" {
+    source      = "web.sh"
+    destination = "/tmp/web.sh"
+  }
+
+  connection {
+    type        = "ssh"
+    user        = var.webuser
+    private_key = file("dove-key") #here we can directly mention the generated private key, else can use file function by keeping the private key path (in github I'm not pushing the private key)
+    host        = self.public_ip   #gets the public ip of creating instance
+  }
+
+  provisioner "remote-exec" {
+    inline = [
+      "chmod +x /tmp/web.sh",
+      "sudo /tmp/web.sh"
+    ]
+  }
 }
 
 #if we terminate any resource from console, terraform plan/apply detect that change but
