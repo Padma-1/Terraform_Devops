@@ -28,6 +28,11 @@ resource "aws_instance" "web" {
       "sudo /tmp/web.sh"
     ]
   }
+
+  # to store the value in a file in local using local-exec (copied the generated output file also into github)
+  provisioner "local-exec" {
+    command = "echo ${self.private_ip} >> private_ips.txt"
+  }
 }
 
 #if we terminate any resource from console, terraform plan/apply detect that change but
