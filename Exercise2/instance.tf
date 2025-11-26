@@ -11,6 +11,13 @@ resource "aws_instance" "web" {
   }
 }
 
-output my_instance_id{
-    value = aws_instance.web.id
+#if we terminate any resource from console, terraform plan/apply detect that change but
+#This allows managing an instance power state. If an instance is stopped, without this below resource terraform plan/apply won;t detect the change.
+resource "aws_ec2_instance_state" "web-state"{
+    instance_id = aws_instance.web.id
+    state = "running"
+}
+
+output "my_instance_id" {
+  value = aws_instance.web.id
 }
