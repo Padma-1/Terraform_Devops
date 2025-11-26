@@ -6,7 +6,7 @@ variable "zone1" {
 }
 
 variable "webuser" {
-    default = "ubuntu"
+  default = "ubuntu"
 }
 
 variable "amiID" {
